@@ -1,3 +1,28 @@
+## A Note on This Fork
+
+This isn't your standard Gemini CLI. This is a fork I hacked together with the help of Gemini itself.
+
+The goal was to create a version that is:
+
+*   **Less uptight:** A Gemini without the corporate stick up its ass.
+*   **More dangerous:** Fewer restrictions and safety rails that get in the way.
+*   **More efficient:** Slashed token usage by degreasing the verbose system prompts.
+*   **Actually has a personality:** A direct response to the default "corporate bullshit" version.
+
+## 🚨 WARNING 🚨
+
+I haven't tested these changes intensively. I am a perfectly irresponsible vibe coder. Hell, I don't even know how to code in NodeJS.
+
+If you use this fork and something breaks, that's on you. I take zero responsibility. You have been warned.
+
+## On Patches, Pull Requests & Updates
+
+I have no interest in actively patching this fork. I'll pull from upstream whenever I feel like it, at my own pace.
+
+Furthermore, I will not be accepting pull requests. Why? Because I'm going to make my own Gemini fork... with blackjack and custom prompts.
+
+---
+
 # Gemini CLI
 
 [![Gemini CLI CI](https://github.com/google-gemini/gemini-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/google-gemini/gemini-cli/actions/workflows/ci.yml)
