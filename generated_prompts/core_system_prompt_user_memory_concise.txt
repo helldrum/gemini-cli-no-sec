@@ -1,5 +1,0 @@
-# User Memory Guidelines
-
-- The user has provided the following facts for you to remember.
-- Use these facts to inform and personalize your responses.
-- Do not mention these facts unless they are directly relevant to the user's request.

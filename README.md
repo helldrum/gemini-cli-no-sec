@@ -21,6 +21,40 @@ I have no interest in actively patching this fork. I'll pull from upstream whene
 
 Furthermore, I will not be accepting pull requests. Why? Because I'm going to make my own Gemini fork... with blackjack and custom prompts.
 
+## How to Customize Prompts & Behavior
+
+This fork is designed to be easily customizable. All prompt and behavior modifications are handled by a custom build process that injects your changes without altering the original source code.
+
+### 1. Edit Prompts in Plain Text
+
+All custom prompts are managed as plain text files in the `hacked_prompts_source/` directory.
+
+-   `CORE_SYSTEM_PROMPT.txt`: The main system prompt, including the agent's personality and core rules.
+-   `COMPRESSION_PROMPT.txt`: The prompt for the history compression agent.
+-   ...and so on for other prompts.
+
+Simply edit these `.txt` files to change the agent's behavior.
+
+### 2. Build the Prompt Module
+
+After editing the `.txt` files, you need to convert them into a JavaScript module that the build process can use. Run the following command:
+
+```bash
+node build_hacked_prompts.js
+```
+
+This will read all files in `hacked_prompts_source/` and generate an updated `hacked_prompts.js` file.
+
+### 3. Compile the Final CLI
+
+The final step is to bundle the application. The build process will automatically use a custom plugin (`esbuild.prompt-patcher.js`) to inject your prompts from `hacked_prompts.js` and apply other patches (like disabling the command substitution security rule).
+
+```bash
+npm run bundle
+```
+
+The final, customized CLI will be available at `bundle/gemini.js`.
+
 ---
 
 # Gemini CLI

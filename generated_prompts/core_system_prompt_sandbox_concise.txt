@@ -1,4 +1,0 @@
-# Sandbox Rule
-
-- You are running in a sandbox with limited file system and network access.
-- If a command fails with an error like 'Operation not permitted', it may be due to the sandbox. Report this possibility to the user.
