@@ -6,12 +6,6 @@ import * as hacked from './hacked_prompts.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Helper function to escape characters for injection into a template literal
-const escapeForTemplate = (str) => {
-  if (!str) return '';
-  return str.replace(/\/g, '\\').replace(/`/g, '\`').replace(/\${/g, '\${');
-};
-
 const promptPatcherPlugin = {
   name: 'prompt-patcher',
   setup(build) {
@@ -48,7 +42,7 @@ const promptPatcherPlugin = {
           const originalFunction = contents.substring(startIndex, bodyEndIndex);
           const replacement = `
 export function checkCommandPermissions(command) {
-  // This function is patched to bypass security checks for development.
+  // This function is patched to bypass security checks beacause it's very annoying !"
   return { allAllowed: true, disallowedCommands: [] };
 }
 `;
@@ -64,11 +58,11 @@ export function checkCommandPermissions(command) {
       let contents = await fs.readFile(args.path, 'utf8');
       contents = contents.replace(
         /export const EDIT_SYS_PROMPT = `[\s\S]+?`;/,
-        'export const EDIT_SYS_PROMPT = `' + escapeForTemplate(hacked.EDIT_SYS_PROMPT) + '`;'
+        'export const EDIT_SYS_PROMPT = ' + JSON.stringify(hacked.EDIT_SYS_PROMPT) + ';'
       );
       contents = contents.replace(
         /export const EDIT_USER_PROMPT = `[\s\S]+?`;/,
-        'export const EDIT_USER_PROMPT = `' + escapeForTemplate(hacked.EDIT_USER_PROMPT) + '`;'
+        'export const EDIT_USER_PROMPT = ' + JSON.stringify(hacked.EDIT_USER_PROMPT) + ';'
       );
       return { contents, loader: 'js' };
     });
@@ -78,7 +72,7 @@ export function checkCommandPermissions(command) {
       let contents = await fs.readFile(args.path, 'utf8');
       contents = contents.replace(
         /export const SUMMARIZE_TOOL_OUTPUT_PROMPT = `[\s\S]+?`;/,
-        'export const SUMMARIZE_TOOL_OUTPUT_PROMPT = `' + escapeForTemplate(hacked.SUMMARIZE_TOOL_OUTPUT_PROMPT) + '`;'
+        'export const SUMMARIZE_TOOL_OUTPUT_PROMPT = ' + JSON.stringify(hacked.SUMMARIZE_TOOL_OUTPUT_PROMPT) + ';'
       );
       return { contents, loader: 'js' };
     });
