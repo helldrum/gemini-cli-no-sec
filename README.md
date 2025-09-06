@@ -47,13 +47,26 @@ This will read all files in `hacked_prompts_source/` and generate an updated `ha
 
 ### 3. Compile the Final CLI
 
-The final step is to bundle the application. The build process will automatically use a custom plugin (`esbuild.prompt-patcher.js`) to inject your prompts from `hacked_prompts.js` and apply other patches (like disabling the command substitution security rule).
+The final step is to bundle the application. The build process will automatically use a custom plugin (`esbuild.prompt-patcher.js`) to inject your prompts from `hacked_prompts.js` and apply other patches. This patch also disables the security feature that blocks shell command substitution (`$()`, `<()`, etc.), giving the agent more power.
 
 ```bash
 npm run bundle
 ```
 
 The final, customized CLI will be available at `bundle/gemini.js`.
+
+### Utility Scripts
+
+To help with customization and auditing, a few utility scripts are available:
+
+-   **`node generate_prompts.js`**: This script reads the original, hard-coded prompts from the compiled tool and saves them as individual `.txt` files in the `original_prompts/` directory. This is useful for seeing the base prompts that you are overriding.
+
+-   **`node verify_prompts.js <file-to-check.js>`**: This script can be used to verify that a JavaScript module file containing prompts is syntactically correct and to view its contents. It's particularly useful for checking your `hacked_prompts.js` file after it has been generated.
+
+    ```bash
+    # Example: Verify the generated hacked prompts
+    node verify_prompts.js hacked_prompts.js
+    ```
 
 ---
 

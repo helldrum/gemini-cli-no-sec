@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { writeFileSync } from 'node:fs';
-import promptPatcherPlugin from './esbuild.prompt-patcher.js'; // Import the skeleton plugin
+import promptPatcherPlugin from './esbuild.prompt-patcher.js'; // Import the plugin
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,7 +34,7 @@ esbuild
     platform: 'node',
     format: 'esm',
     external,
-    plugins: [promptPatcherPlugin], // Use the skeleton plugin
+    plugins: [promptPatcherPlugin], // Use the plugin
     alias: {
       'is-in-ci': path.resolve(
         __dirname,

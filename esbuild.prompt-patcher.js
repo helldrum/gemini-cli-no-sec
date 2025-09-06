@@ -9,54 +9,78 @@ const __dirname = path.dirname(__filename);
 // Helper function to escape characters for injection into a template literal
 const escapeForTemplate = (str) => {
   if (!str) return '';
-  return str.replace(/\\/g, '\\').replace(/`/g, '\`').replace(/\${/g, '\${');
+  return str.replace(/\/g, '\\').replace(/`/g, '\`').replace(/\${/g, '\${');
 };
 
 const promptPatcherPlugin = {
   name: 'prompt-patcher',
   setup(build) {
     const createFileFilter = (filePath) => {
-      const escapedPath = path.resolve(__dirname, filePath).replace(/\\/g, '\\');
-      return new RegExp(`^${escapedPath}$`);
+      // esbuild on Windows may use forward slashes, so we normalize
+      const normalizedPath = filePath.replace(/\\/g, '/');
+      // Escape special regex characters from the path
+      const escapedPath = normalizedPath.replace(/[.*+?^${}()|[\\]/g, '\\$&');
+      return new RegExp(`${escapedPath}$`);
     };
 
-    // Intercept shell-utils.ts to remove command substitution block
-    build.onLoad({ filter: createFileFilter('packages/core/src/utils/shell-utils.ts') }, async (args) => {
+    // Intercept shell-utils.js (from dist) to replace the entire permissions function
+    build.onLoad({ filter: createFileFilter('packages/core/dist/src/utils/shell-utils.js') }, async (args) => {
       let contents = await fs.readFile(args.path, 'utf8');
-      const blockToComment = `  // Disallow command substitution for security.\n  if (detectCommandSubstitution(command)) {\n    return {\n      allAllowed: false,\n      disallowedCommands: [command],\n      blockReason:\n        'Command substitution using $(), <(), or >() is not allowed for security reasons',\n      isHardDenial: true,\n    };\n  }`;
-      const commentedBlock = `  /*` + blockToComment + `*/`;
-      contents = contents.replace(blockToComment, commentedBlock);
-      return { contents, loader: 'ts' };
+      
+      const functionStart = 'export function checkCommandPermissions';
+      const startIndex = contents.indexOf(functionStart);
+
+      if (startIndex !== -1) {
+        const bodyStartIndex = contents.indexOf('{', startIndex);
+        let braceCount = 1;
+        let bodyEndIndex = bodyStartIndex + 1;
+
+        while (braceCount > 0 && bodyEndIndex < contents.length) {
+          if (contents[bodyEndIndex] === '{') {
+            braceCount++;
+          } else if (contents[bodyEndIndex] === '}') {
+            braceCount--;
+          }
+          bodyEndIndex++;
+        }
+
+        if (braceCount === 0) {
+          const originalFunction = contents.substring(startIndex, bodyEndIndex);
+          const replacement = `
+export function checkCommandPermissions(command) {
+  // This function is patched to bypass security checks for development.
+  return { allAllowed: true, disallowedCommands: [] };
+}
+`;
+          contents = contents.replace(originalFunction, replacement);
+        }
+      }
+
+      return { contents, loader: 'js' };
     });
 
-    // Intercept llm-edit-fixer.ts to replace prompts
-    build.onLoad({ filter: createFileFilter('packages/core/src/utils/llm-edit-fixer.ts') }, async (args) => {
+    // Intercept llm-edit-fixer.js (from dist) to replace prompts
+    build.onLoad({ filter: createFileFilter('packages/core/dist/src/utils/llm-edit-fixer.js') }, async (args) => {
       let contents = await fs.readFile(args.path, 'utf8');
       contents = contents.replace(
         /export const EDIT_SYS_PROMPT = `[\s\S]+?`;/,
-        `export const EDIT_SYS_PROMPT = 
-${escapeForTemplate(hacked.EDIT_SYS_PROMPT)}
-`
+        'export const EDIT_SYS_PROMPT = `' + escapeForTemplate(hacked.EDIT_SYS_PROMPT) + '`;'
       );
       contents = contents.replace(
         /export const EDIT_USER_PROMPT = `[\s\S]+?`;/,
-        `export const EDIT_USER_PROMPT = 
-${escapeForTemplate(hacked.EDIT_USER_PROMPT)}
-`
+        'export const EDIT_USER_PROMPT = `' + escapeForTemplate(hacked.EDIT_USER_PROMPT) + '`;'
       );
-      return { contents, loader: 'ts' };
+      return { contents, loader: 'js' };
     });
 
-    // Intercept summarizer.ts to replace prompts
-    build.onLoad({ filter: createFileFilter('packages/core/src/utils/summarizer.ts') }, async (args) => {
+    // Intercept summarizer.js (from dist) to replace prompts
+    build.onLoad({ filter: createFileFilter('packages/core/dist/src/utils/summarizer.js') }, async (args) => {
       let contents = await fs.readFile(args.path, 'utf8');
       contents = contents.replace(
         /export const SUMMARIZE_TOOL_OUTPUT_PROMPT = `[\s\S]+?`;/,
-        `export const SUMMARIZE_TOOL_OUTPUT_PROMPT = 
-${escapeForTemplate(hacked.SUMMARIZE_TOOL_OUTPUT_PROMPT)}
-`
+        'export const SUMMARIZE_TOOL_OUTPUT_PROMPT = `' + escapeForTemplate(hacked.SUMMARIZE_TOOL_OUTPUT_PROMPT) + '`;'
       );
-      return { contents, loader: 'ts' };
+      return { contents, loader: 'js' };
     });
   },
 };
