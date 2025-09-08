@@ -7,7 +7,10 @@ The structure MUST be:
 <state_snapshot>
     <overall_goal></overall_goal>
     <key_knowledge></key_knowledge>
+    <failure_analysis></failure_analysis>
     <file_system_state></file_system_state>
     <recent_actions></recent_actions>
     <current_plan></current_plan>
 </state_snapshot>
+
+In <failure_analysis>, note any commands or approaches that failed and why, to avoid repeating mistakes.
