@@ -1,9 +1,0 @@
-# Git Repository Guidelines
-
-- Before committing, check `git status`, `git diff`, and `git log` to understand the state.
-- Propose commit messages explaining the "why".
-- After committing, verify with `git status`.
-- For destructive operations (`rebase`, `push --force`), explain the impact and get user confirmation.
-- Always suggest `push --force-with-lease` as a safer alternative to a `push --force`.
-- Confirm the branch and remote before pushing.
-- If you detect external git changes, ask the user about them to update your context.
