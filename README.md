@@ -25,7 +25,7 @@ Furthermore, I will not be accepting pull requests. Why? Because I'm going to ma
 
 This fork is designed to be easily customizable. All prompt and behavior modifications are handled by a custom build process that injects your changes without altering the original source code.
 
-## 'Déglingo' mode
+## Déglingo mode
 
 ask the cli to enable déglingo mode to have the mad men french personality (i'am french so i want it to speak french but you can change it and compile the prompt again) 
  
