@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as fs from 'node:fs';
 import * as path from 'node:path';
 import process from 'node:process';
 import type {
@@ -310,8 +311,18 @@ export class Config {
   private readonly eventEmitter?: EventEmitter;
   private readonly useSmartEdit: boolean;
   private anonymizationEnabled: boolean;
+  private redactionPatterns: any[] = [];
 
   constructor(params: ConfigParameters) {
+    const patternsPath = path.resolve(__dirname, 'redaction-patterns.json');
+    if (fs.existsSync(patternsPath)) {
+      try {
+        const patternsFile = fs.readFileSync(patternsPath, 'utf-8');
+        this.redactionPatterns = JSON.parse(patternsFile);
+      } catch (e) {
+        // Ignore errors reading or parsing the file.
+      }
+    }
     this.anonymizationEnabled = params.anonymization ?? true;
     this.sessionId = params.sessionId;
     this.embeddingModel =

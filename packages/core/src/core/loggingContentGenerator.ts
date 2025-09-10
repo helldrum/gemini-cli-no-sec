@@ -110,9 +110,24 @@ export class LoggingContentGenerator implements ContentGenerator {
     if (!this.config.isAnonymizationEnabled()) {
       return req;
     }
-
-    const redactor = new DeepRedact({});
-    return redactor.redact(req) as GenerateContentParameters;
+    const patterns = this.config.getRedactionPatterns();
+    const redactor = new DeepRedact({
+      stringTests: patterns.map((p: any) => new RegExp(p.pattern, p.flags)),
+    });
+    const newContents = req.contents.map((content) => {
+      const newParts = content.parts.map((part) => {
+        if ('text' in part && typeof part.text === 'string') {
+          const redactedText = redactor.redact(part.text) as string;
+          return { ...part, text: redactedText };
+        }
+        return part;
+      });
+      return { ...content, parts: newParts };
+    });
+    return {
+      ...req,
+      contents: newContents,
+    };
   }
 
   async generateContent(

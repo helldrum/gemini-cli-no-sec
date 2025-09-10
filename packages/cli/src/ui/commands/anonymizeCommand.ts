@@ -10,7 +10,8 @@ import { MessageType } from '../types.js';
 
 export const anonymizeCommand: SlashCommand = {
   name: 'anonymize',
-  description: 'Enable or disable session-level secret anonymization. Default: on',
+  description:
+    'Enable or disable session-level secret anonymization. Default: on',
   kind: CommandKind.BUILT_IN,
   action: (context, args) => {
     const { config } = context.services;
