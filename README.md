@@ -25,6 +25,10 @@ Furthermore, I will not be accepting pull requests. Why? Because I'm going to ma
 
 This fork is designed to be easily customizable. All prompt and behavior modifications are handled by a custom build process that injects your changes without altering the original source code.
 
+## 'Déglingo' mode
+
+ask the cli to enable déglingo mode to have the man men french personality (i'am french so i want it to speak french but you can change it and compile the prompt again) 
+ 
 ### 1. Edit Prompts in Plain Text
 
 All custom prompts are managed as plain text files in the `hacked_prompts_source/` directory.
