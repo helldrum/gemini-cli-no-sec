@@ -1,5 +1,5 @@
 const { customRules } = require('./packages/core/src/pii/gitleaksFilters.ts');
-const { readFileSync } = require('fs');
+const { readFileSync, writeFileSync } = require('fs'); // Import writeFileSync
 const { join } = require('path');
 
 // Helper to check if a string is valid Base64
@@ -16,16 +16,6 @@ function isBase64(str) {
   }
 }
 
-// Helper to check if a string is a clear GCP Service Account Key JSON
-function isClearGcpServiceAccountKeyJson(str) {
-  // Use the regex from gitleaksFilters.ts for GCP Service Account Key
-  const gcpKeyRule = customRules.find(rule => rule.name === 'GCP Service Account Key');
-  if (gcpKeyRule) {
-    return gcpKeyRule.pattern().test(str);
-  }
-  return false;
-}
-
 // Custom redaction function for general regex rules
 function redactContent(content, rules) {
   let redacted = content;
@@ -36,8 +26,8 @@ function redactContent(content, rules) {
 }
 
 async function runRedactionTest() {
-  // Test with a clear GCP service account key JSON
-  const testFilePath = join(__dirname, 'test_data', 'test.yaml');
+  const testFilePath = join(__dirname, 'test_data', 'comprehensive_test.txt');
+  const outputFilePath = join(__dirname, 'test_data', 'comprehensive_test_redacted.txt'); // New output file path
   let originalContent = readFileSync(testFilePath, 'utf8');
 
   console.log('Original Content (raw from file):');
@@ -45,22 +35,22 @@ async function runRedactionTest() {
 
   let redactedResult = originalContent; // Initialize with original content
 
-  // 1. Check for Base64 redaction
+  // 1. Prioritized Base64 redaction (if the entire content is Base64)
   if (isBase64(originalContent)) {
     redactedResult = '[redacted]';
-    console.log('\n--- Detected and Redacted Base64 String ---');
-  } else if (isClearGcpServiceAccountKeyJson(originalContent)) {
-    // 2. Check for clear GCP JSON Key redaction (if not Base64)
-    redactedResult = '[redacted]';
-    console.log('\n--- Detected and Redacted Clear GCP Service Account Key JSON ---');
+    console.log('\n--- Detected and Redacted Base64 String (Entire Content) ---');
   } else {
-    // 3. Apply other regex rules if neither of the above
-    console.log('\n--- Applying General Redaction Rules ---');
+    // Apply general regex rules if not a full Base64 string
     redactedResult = redactContent(originalContent, customRules);
+    console.log('\n--- Applied General Redaction Rules ---');
   }
 
   console.log('\nRedacted Content:');
   console.log(redactedResult);
+
+  // Write the redacted content to the output file
+  writeFileSync(outputFilePath, redactedResult, 'utf8');
+  console.log(`\nRedacted content written to: ${outputFilePath}`);
 }
 
 runRedactionTest();

@@ -10,6 +10,7 @@ L'objectif principal est d'empêcher l'envoi d'informations personnelles identif
 
 ## Approche Choisie
 
+- **Format de caviardage :** Pour les paires clé-valeur, la clé reste en clair et seule la valeur est caviardée. Pour les blocs de texte (clés privées, chaînes Base64 complètes), le bloc entier est caviardé.
 - **Méthode :** Application directe d'expressions régulières personnalisées au sein du `GeminiClient`, avec une priorité pour la détection et le caviardage complet des chaînes Base64 valides et des blocs JSON de clés de compte de service GCP en clair.
 
 ## Plan d'Action
@@ -33,7 +34,7 @@ Des tests ont été effectués avec un prompt contenant divers secrets.
 - Clé d'API GCP (`AIza...`)
 - **Clé privée :** Le bloc complet de la clé privée est maintenant correctement caviardé.
 - **Email :** Les adresses e-mail sont maintenant correctement détectées et caviardées.
-- **Clé de compte de service GCP (JSON) :** Les blocs JSON de clés de compte de service GCP en clair sont entièrement caviardés.
+- **Clé de compte de service GCP (JSON) :** Les blocs JSON de clés de compte de service GCP en clair sont caviardés partiellement par les règles génériques.
 - **Contenu Base64 :** Les chaînes Base64 valides sont entièrement caviardées.
 - **Numéro de téléphone :** Les numéros de téléphone (y compris les formats avec points comme 08.36.65.65.65) sont maintenant correctement détectées et caviardées.
 - **Chaînes de connexion (JDBC, Redis, WSS) :** Les chaînes de connexion sensibles sont maintenant correctement détectées et caviardées.

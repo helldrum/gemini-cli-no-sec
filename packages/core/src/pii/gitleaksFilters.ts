@@ -16,20 +16,15 @@ interface RedactionRule {
 // This is important because the 'g' flag makes the regex stateful.
 const gitleaksRules: RedactionRule[] = [
   {
-    name: 'GCP Service Account Key',
-    pattern: () =>
-      /\{\s*"type":\s*"service_account"[\s\S]*?"private_key":\s*"-----BEGIN PRIVATE KEY-----[\s\S]*?-----END PRIVATE KEY-----\s*\\n?"[\s\S]*?\}/g,
-  },
-  {
     name: 'Private Key',
     pattern: () =>
-      /-----BEGIN[ A-Z0-9_-]{0,100}PRIVATE KEY-----([\s\S]*?)-----END[ A-Z0-9_-]{0,100}PRIVATE KEY-----\s*\\n?/g,
+      /(-----BEGIN[ A-Z0-9_-]{0,100}PRIVATE KEY-----[\s\S]*?-----END[ A-Z0-9_-]{0,100}PRIVATE KEY-----\s*\n?)/g,
   },
   {
     // Source: Adapted from various gitleaks rules for generic secrets.
     name: 'Generic Secret',
     pattern: () =>
-      /(secret|token|password|bearer|key|auth|database_url)[_A-Z0-9]*\s*[:=]\s*['"]?[^,\n'"]+['"]?/gi,
+      /(secret|token|password|bearer|key|auth)[_A-Z0-9]*\s*[:=]\s*['"]?[^,\n'"]+['"]?/gi,
   },
   {
     name: 'JDBC Connection String',
@@ -100,10 +95,6 @@ const gitleaksRules: RedactionRule[] = [
     // Source: https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml#L1154
     name: 'Stripe Access Token',
     pattern: () => /(?:sk|rk)_(?:test|live|prod)_[a-zA-Z0-9]{10,99}/g,
-  },
-  {
-    name: 'Long Base64 String',
-    pattern: () => /[A-Za-z0-9+/=\s]{40,}/g,
   },
 ];
 
