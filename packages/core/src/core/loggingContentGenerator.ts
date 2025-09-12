@@ -14,6 +14,7 @@ import type {
   GenerateContentResponseUsageMetadata,
   GenerateContentResponse,
 } from '@google/genai';
+import { DeepRedact } from '@hackylabs/deep-redact';
 import {
   ApiRequestEvent,
   ApiResponseEvent,
@@ -103,14 +104,33 @@ export class LoggingContentGenerator implements ContentGenerator {
     );
   }
 
+  private anonymizeRequest(
+    req: GenerateContentParameters,
+  ): GenerateContentParameters {
+    if (!this.config.isAnonymizationEnabled()) {
+      return req;
+    }
+
+    const redactor = new DeepRedact({});
+    return redactor.redact(req) as GenerateContentParameters;
+  }
+
   async generateContent(
     req: GenerateContentParameters,
     userPromptId: string,
   ): Promise<GenerateContentResponse> {
+    const anonymizedReq = this.anonymizeRequest(req);
     const startTime = Date.now();
-    this.logApiRequest(toContents(req.contents), req.model, userPromptId);
+    this.logApiRequest(
+      toContents(anonymizedReq.contents),
+      anonymizedReq.model,
+      userPromptId,
+    );
     try {
-      const response = await this.wrapped.generateContent(req, userPromptId);
+      const response = await this.wrapped.generateContent(
+        anonymizedReq,
+        userPromptId,
+      );
       const durationMs = Date.now() - startTime;
       this._logApiResponse(
         durationMs,
@@ -122,7 +142,7 @@ export class LoggingContentGenerator implements ContentGenerator {
       return response;
     } catch (error) {
       const durationMs = Date.now() - startTime;
-      this._logApiError(durationMs, error, req.model, userPromptId);
+      this._logApiError(durationMs, error, anonymizedReq.model, userPromptId);
       throw error;
     }
   }
@@ -131,15 +151,23 @@ export class LoggingContentGenerator implements ContentGenerator {
     req: GenerateContentParameters,
     userPromptId: string,
   ): Promise<AsyncGenerator<GenerateContentResponse>> {
+    const anonymizedReq = this.anonymizeRequest(req);
     const startTime = Date.now();
-    this.logApiRequest(toContents(req.contents), req.model, userPromptId);
+    this.logApiRequest(
+      toContents(anonymizedReq.contents),
+      anonymizedReq.model,
+      userPromptId,
+    );
 
     let stream: AsyncGenerator<GenerateContentResponse>;
     try {
-      stream = await this.wrapped.generateContentStream(req, userPromptId);
+      stream = await this.wrapped.generateContentStream(
+        anonymizedReq,
+        userPromptId,
+      );
     } catch (error) {
       const durationMs = Date.now() - startTime;
-      this._logApiError(durationMs, error, req.model, userPromptId);
+      this._logApiError(durationMs, error, anonymizedReq.model, userPromptId);
       throw error;
     }
 

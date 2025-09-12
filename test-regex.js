@@ -9,16 +9,23 @@ const escapeForTemplate = (str) => {
 
 async function test() {
   // Read the file content
-  let contents = await fs.readFile('./packages/core/dist/src/utils/llm-edit-fixer.js', 'utf8');
+  let contents = await fs.readFile(
+    './packages/core/dist/src/utils/llm-edit-fixer.js',
+    'utf8',
+  );
 
   // This is the replacement logic from the plugin
   contents = contents.replace(
     /export const EDIT_SYS_PROMPT = `[\s\S]+?`;/,
-    'export const EDIT_SYS_PROMPT = `' + escapeForTemplate(hacked.EDIT_SYS_PROMPT) + '`;'
+    'export const EDIT_SYS_PROMPT = `' +
+      escapeForTemplate(hacked.EDIT_SYS_PROMPT) +
+      '`;',
   );
   contents = contents.replace(
     /export const EDIT_USER_PROMPT = `[\s\S]+?`;/,
-    'export const EDIT_USER_PROMPT = `' + escapeForTemplate(hacked.EDIT_USER_PROMPT) + '`;'
+    'export const EDIT_USER_PROMPT = `' +
+      escapeForTemplate(hacked.EDIT_USER_PROMPT) +
+      '`;',
   );
 
   // Print the result to the console
