@@ -94,7 +94,7 @@
   "dependencies": {
     "@lvce-editor/ripgrep": "^1.6.0",
     "js-yaml": "^4.1.0",
-    "@hackylabs/deep-redact": "^3.0.3",
+
     "simple-git": "^3.28.0"
   },
   "optionalDependencies": {

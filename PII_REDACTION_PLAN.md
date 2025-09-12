@@ -2,23 +2,23 @@
 
 Ce document suit l'avancement de l'implémentation de la fonctionnalité d'anonymisation des prompts.
 
+les regex de prompt sont dans le fichier packages/core/src/pii/gitleaksFilters.ts
+
 ## Objectif
 
 L'objectif principal est d'empêcher l'envoi d'informations personnelles identifiables (PII) et de secrets (clés d'API, tokens, mots de passe) aux serveurs de Google. Pour ce faire, nous devons filtrer le contenu des prompts de l'utilisateur avant chaque envoi.
 
 ## Approche Choisie
 
-- **Librairie :** `@hackylabs/deep-redact` est utilisé en combinaison avec des expressions régulières personnalisées.
-- **Source des Filtres :** `gitleaks` (projet de détection de secrets open-source)
-  - **Raison :** Fournit une liste complète et maintenue par la communauté d'expressions régulières (regex) pour détecter une grande variété de secrets.
+- **Méthode :** Application directe d'expressions régulières personnalisées au sein du `GeminiClient`, avec une priorité pour la détection et le caviardage complet des chaînes Base64 valides et des blocs JSON de clés de compte de service GCP en clair.
 
 ## Plan d'Action
 
 1.  [x] Définir l'objectif et choisir l'approche technique.
 2.  [x] Créer ce fichier de suivi (`PII_REDACTION_PLAN.md`).
-3.  [x] Ajouter la dépendance `@hackylabs/deep-redact` au projet.
+3.  [x] Implémenter la logique d'application directe des regex au sein du `GeminiClient`, avec une priorité pour la détection et le caviardage complet des chaînes Base64 valides et des blocs JSON de clés de compte de service GCP en clair.
 4.  [x] Créer un fichier de configuration pour les filtres personnalisés (`packages/core/src/pii/gitleaksFilters.ts`).
-5.  [x] Adapter les regex de `gitleaks` au format de la librairie.
+5.  [x] Adapter les regex de `gitleaks` pour une application directe.
 6.  [x] Intégrer la logique d'anonymisation dans le `GeminiClient` pour filtrer les prompts.
 7.  [x] Tester la solution avec des exemples de secrets.
 
@@ -31,21 +31,23 @@ Des tests ont été effectués avec un prompt contenant divers secrets.
 - Clé d'accès AWS (`AKIA...`) (règle améliorée)
 - Secret AWS (chaîne de 40 caractères) (faux positifs réduits)
 - Clé d'API GCP (`AIza...`)
+- **Clé privée :** Le bloc complet de la clé privée est maintenant correctement caviardé.
+- **Email :** Les adresses e-mail sont maintenant correctement détectées et caviardées.
+- **Clé de compte de service GCP (JSON) :** Les blocs JSON de clés de compte de service GCP en clair sont entièrement caviardés.
+- **Contenu Base64 :** Les chaînes Base64 valides sont entièrement caviardées.
+- **Numéro de téléphone :** Les numéros de téléphone (y compris les formats avec points comme 08.36.65.65.65) sont maintenant correctement détectées et caviardées.
+- **Chaînes de connexion (JDBC, Redis, WSS) :** Les chaînes de connexion sensibles sont maintenant correctement détectées et caviardées.
 
 **Ce qui n'est PAS (ou mal) caviardé :**
 
-- **Clé privée :** Seul l'en-tête `-----BEGIN PRIVATE KEY-----` est caviardé, le corps de la clé est envoyé en clair.
-- **Email :** Les adresses e-mail ne sont pas détectées.
-- **Numéro de téléphone :** Les numéros de téléphone ne sont pas détectés.
+- **Contenu Base64 :** La gestion des chaînes Base64 doit être affinée pour des cas d'utilisation spécifiques (par exemple, si le contenu décodé doit être analysé par d'autres regex).
 
 ## Prochaines Étapes
 
-- [ ] Améliorer la regex pour les clés privées afin de caviarder l'intégralité du bloc.
-- [ ] Ajouter une règle de caviardage pour les adresses e-mail.
-- [ ] Ajouter une règle de caviardage pour les numéros de téléphone.
+- [ ] Implémenter une fonction spécifique pour détecter et caviarder toutes les chaînes Base64 valides avant l'application des règles de caviardage génériques. Le contenu décodé ne doit pas être analysé par d'autres regex.
+- [ ] Supprimer la règle `Long Base64 String` de `gitleaksFilters.ts`.
 - [x] Affiner la règle pour les secrets de 40 caractères afin de réduire les faux positifs.
 - [x] Améliorer la règle pour les clés d'accès AWS (`AKIA...`) pour être plus spécifique.
-- [ ] Créer un script qui met à jour automatiquement les regex de gitleaks.
 
 ---
 
