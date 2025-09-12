@@ -97,6 +97,11 @@ export interface SummarizeToolOutputSettings {
   tokenBudget?: number;
 }
 
+export interface RedactionPattern {
+  pattern: string;
+  flags?: string;
+}
+
 export interface TelemetrySettings {
   enabled?: boolean;
   target?: TelemetryTarget;
@@ -311,15 +316,15 @@ export class Config {
   private readonly eventEmitter?: EventEmitter;
   private readonly useSmartEdit: boolean;
   private anonymizationEnabled: boolean;
-  private redactionPatterns: any[] = [];
+  private redactionPatterns: RedactionPattern[] = [];
 
   constructor(params: ConfigParameters) {
     const patternsPath = path.resolve(__dirname, 'redaction-patterns.json');
     if (fs.existsSync(patternsPath)) {
       try {
         const patternsFile = fs.readFileSync(patternsPath, 'utf-8');
-        this.redactionPatterns = JSON.parse(patternsFile);
-      } catch (e) {
+        this.redactionPatterns = JSON.parse(patternsFile) as RedactionPattern[];
+      } catch (_e) {
         // Ignore errors reading or parsing the file.
       }
     }
@@ -892,6 +897,10 @@ export class Config {
 
   setAnonymizationEnabled(enabled: boolean): void {
     this.anonymizationEnabled = enabled;
+  }
+
+  getRedactionPatterns(): RedactionPattern[] {
+    return this.redactionPatterns;
   }
 
   async getGitService(): Promise<GitService> {

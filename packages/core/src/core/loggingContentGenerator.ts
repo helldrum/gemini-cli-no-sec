@@ -14,7 +14,6 @@ import type {
   GenerateContentResponseUsageMetadata,
   GenerateContentResponse,
 } from '@google/genai';
-import { DeepRedact } from '@hackylabs/deep-redact';
 import {
   ApiRequestEvent,
   ApiResponseEvent,
@@ -111,13 +110,14 @@ export class LoggingContentGenerator implements ContentGenerator {
       return req;
     }
     const patterns = this.config.getRedactionPatterns();
-    const redactor = new DeepRedact({
-      stringTests: patterns.map((p: any) => new RegExp(p.pattern, p.flags)),
-    });
     const newContents = req.contents.map((content) => {
       const newParts = content.parts.map((part) => {
         if ('text' in part && typeof part.text === 'string') {
-          const redactedText = redactor.redact(part.text) as string;
+          let redactedText = part.text;
+          for (const p of patterns) {
+            const regex = new RegExp(p.pattern, p.flags || 'g');
+            redactedText = redactedText.replace(regex, '[REDACTED]');
+          }
           return { ...part, text: redactedText };
         }
         return part;
