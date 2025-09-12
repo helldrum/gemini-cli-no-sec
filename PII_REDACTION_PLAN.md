@@ -28,8 +28,8 @@ Des tests ont été effectués avec un prompt contenant divers secrets.
 
 **Ce qui est correctement caviardé :**
 
-- Clé d'accès AWS (`AKIA...`)
-- Secret AWS (chaîne de 40 caractères)
+- Clé d'accès AWS (`AKIA...`) (règle améliorée)
+- Secret AWS (chaîne de 40 caractères) (faux positifs réduits)
 - Clé d'API GCP (`AIza...`)
 
 **Ce qui n'est PAS (ou mal) caviardé :**
@@ -37,14 +37,14 @@ Des tests ont été effectués avec un prompt contenant divers secrets.
 - **Clé privée :** Seul l'en-tête `-----BEGIN PRIVATE KEY-----` est caviardé, le corps de la clé est envoyé en clair.
 - **Email :** Les adresses e-mail ne sont pas détectées.
 - **Numéro de téléphone :** Les numéros de téléphone ne sont pas détectés.
-- **Faux positif :** Le `private_key_id` de GCP (chaîne de 40 caractères) est caviardé par la règle trop large des secrets AWS.
 
 ## Prochaines Étapes
 
 - [ ] Améliorer la regex pour les clés privées afin de caviarder l'intégralité du bloc.
 - [ ] Ajouter une règle de caviardage pour les adresses e-mail.
 - [ ] Ajouter une règle de caviardage pour les numéros de téléphone.
-- [ ] Affiner la règle pour les secrets de 40 caractères afin de réduire les faux positifs.
+- [x] Affiner la règle pour les secrets de 40 caractères afin de réduire les faux positifs.
+- [x] Améliorer la règle pour les clés d'accès AWS (`AKIA...`) pour être plus spécifique.
 - [ ] Créer un script qui met à jour automatiquement les regex de gitleaks.
 
 ---

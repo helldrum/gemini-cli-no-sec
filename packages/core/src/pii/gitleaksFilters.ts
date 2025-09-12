@@ -58,14 +58,17 @@ const gitleaksRules: RedactionRule[] = [
   },
   {
     // Source: https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml#L63
+    // The regex is enhanced based on https://awsteele.com/blog/2020/09/26/aws-access-key-format.html
+    // to be more specific for AKIA keys.
     name: 'AWS Access Key',
     pattern: () =>
-      /(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}/g,
+      /AKIA[A-Z2-7]{16}|(A3T[A-Z0-9]|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}/g,
   },
   {
     // Source: https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml#L72
+    // This regex uses negative lookarounds to reduce false positives.
     name: 'AWS Secret Key',
-    pattern: () => /[0-9a-zA-Z/+=]{40}/g,
+    pattern: () => /(?<![A-Za-z0-9/+=])([A-Za-z0-9/+=]{40})(?![A-Za-z0-9/+=])/g,
   },
   {
     name: 'Private Key',
@@ -80,6 +83,10 @@ const gitleaksRules: RedactionRule[] = [
     name: 'Phone Number',
     pattern: () =>
       /\b(?:\+?\d{1,3}[-.]\s?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
+  },
+  {
+    name: 'Long Base64 String',
+    pattern: () => /[A-Za-z0-9+/=]{40,}/g,
   },
 ];
 
