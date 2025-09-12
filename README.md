@@ -29,6 +29,12 @@ This fork is designed to be easily customizable. All prompt and behavior modific
 
 ask the cli to enable déglingo mode to have the mad men french personality (i'am french so i want it to speak french but you can change it and compile the prompt again)
 
+## Redaction Feature
+
+The Gemini CLI includes a redaction feature that automatically identifies and redacts sensitive information (e.g., API keys, personal data) from your prompts and tool outputs before they are sent to the Gemini API. This helps protect your privacy and prevent accidental exposure of confidential data.
+
+**Disclaimer:** While this feature aims to enhance privacy, it is not bulletproof and might not catch all sensitive information. It serves as an additional layer of protection, especially for API sensitive data. This feature can be disabled via a command-line option if needed.
+
 ### 1. Edit Prompts in Plain Text
 
 All custom prompts are managed as plain text files in the `hacked_prompts_source/` directory.
