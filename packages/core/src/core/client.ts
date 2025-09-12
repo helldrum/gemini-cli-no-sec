@@ -49,6 +49,7 @@ import {
 } from '../telemetry/types.js';
 import type { IdeContext, File } from '../ide/ideContext.js';
 import { handleFallback } from '../fallback/handler.js';
+import { customRules } from '../pii/gitleaksFilters.js';
 
 export function isThinkingSupported(model: string) {
   if (model.startsWith('gemini-2.5')) return true;
@@ -421,6 +422,39 @@ export class GeminiClient {
     }
   }
 
+  private anonymizeRequest(request: PartListUnion): PartListUnion {
+    if (!Array.isArray(request)) {
+      // PartListUnion can be a string in some contexts, though less common.
+      if (typeof request === 'string') {
+        let redactedText = request;
+        for (const rule of customRules) {
+          redactedText = redactedText.replace(rule.pattern(), '[redacted]');
+        }
+        return redactedText;
+      }
+      return request;
+    }
+
+    // The type `Part` can be a string or an object with a `text` property.
+    return request.map((part) => {
+      if (typeof part === 'string') {
+        let redactedText = part;
+        for (const rule of customRules) {
+          redactedText = redactedText.replace(rule.pattern(), '[redacted]');
+        }
+        return redactedText;
+      }
+      if (part.text) {
+        let redactedText = part.text;
+        for (const rule of customRules) {
+          redactedText = redactedText.replace(rule.pattern(), '[redacted]');
+        }
+        return { ...part, text: redactedText };
+      }
+      return part;
+    });
+  }
+
   async *sendMessageStream(
     request: PartListUnion,
     signal: AbortSignal,
@@ -428,6 +462,8 @@ export class GeminiClient {
     turns: number = MAX_TURNS,
     originalModel?: string,
   ): AsyncGenerator<ServerGeminiStreamEvent, Turn> {
+    request = this.anonymizeRequest(request);
+
     if (this.lastPromptId !== prompt_id) {
       this.loopDetector.reset(prompt_id);
       this.lastPromptId = prompt_id;
