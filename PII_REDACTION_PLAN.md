@@ -41,6 +41,7 @@ Des tests ont été effectués avec un prompt contenant divers secrets.
 
 **Ce qui n'est PAS (ou mal) caviardé :**
 
+- **Fonction de désactivation :** La fonction de désactivation du caviardage ne fonctionne pas, ce qui est un problème majeur.
 - **Contenu Base64 :** La gestion des chaînes Base64 doit être affinée pour des cas d'utilisation spécifiques (par exemple, si le contenu décodé doit être analysé par d'autres regex).
 
 ## Prochaines Étapes

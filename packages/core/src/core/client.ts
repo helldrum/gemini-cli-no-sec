@@ -462,7 +462,9 @@ export class GeminiClient {
     turns: number = MAX_TURNS,
     originalModel?: string,
   ): AsyncGenerator<ServerGeminiStreamEvent, Turn> {
-    request = this.anonymizeRequest(request);
+    if (this.config.isAnonymizationEnabled()) {
+      request = this.anonymizeRequest(request);
+    }
 
     if (this.lastPromptId !== prompt_id) {
       this.loopDetector.reset(prompt_id);
