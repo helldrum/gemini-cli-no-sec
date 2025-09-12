@@ -28,7 +28,8 @@ const gitleaksRules: RedactionRule[] = [
   },
   {
     name: 'JDBC Connection String',
-    pattern: () => /jdbc:[a-zA-Z0-9]+:\/\/[^\s'\"]+(?:user|username|password|passwd|pwd)=[^&'\"]+/gi,
+    pattern: () =>
+      /jdbc:[a-zA-Z0-9]+:\/\/[^\s'\"]+(?:user|username|password|passwd|pwd)=[^&'\"]+/gi,
   },
   {
     name: 'Redis Connection String',

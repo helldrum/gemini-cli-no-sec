@@ -13,29 +13,29 @@ L'utilisateur a demandé de désactiver la restriction de sécurité qui empêch
 Dans le fichier `packages/core/src/utils/shell-utils.ts`, le bloc de code suivant à l'intérieur de la fonction `checkCommandPermissions` a été commenté :
 
 ```typescript
-  // Disallow command substitution for security.
-  if (detectCommandSubstitution(command)) {
-    return {
-      allAllowed: false,
-      disallowedCommands: [command],
-      blockReason:
-        'Command substitution using $(), <(), or >() is not allowed for security reasons',
-      isHardDenial: true,
-    };
-  }
+// Disallow command substitution for security.
+if (detectCommandSubstitution(command)) {
+  return {
+    allAllowed: false,
+    disallowedCommands: [command],
+    blockReason:
+      'Command substitution using $(), <(), or >() is not allowed for security reasons',
+    isHardDenial: true,
+  };
+}
 ```
 
 **Nouveau code :**
 
 ```typescript
-  // Disallow command substitution for security.
-  // if (detectCommandSubstitution(command)) {
-  //   return {
-  //     allAllowed: false,
-  //     disallowedCommands: [command],
-  //     blockReason:
-  //       'Command substitution using $(), <(), or >() is not allowed for security reasons',
-  //     isHardDenial: true,
-  //   };
-  // }
+// Disallow command substitution for security.
+// if (detectCommandSubstitution(command)) {
+//   return {
+//     allAllowed: false,
+//     disallowedCommands: [command],
+//     blockReason:
+//       'Command substitution using $(), <(), or >() is not allowed for security reasons',
+//     isHardDenial: true,
+//   };
+// }
 ```
