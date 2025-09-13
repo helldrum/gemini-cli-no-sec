@@ -71,6 +71,7 @@ export interface SessionMetrics {
     totalLinesAdded: number;
     totalLinesRemoved: number;
   };
+  totalCost: number;
 }
 
 const createInitialModelMetrics = (): ModelMetrics => ({
@@ -108,6 +109,7 @@ const createInitialMetrics = (): SessionMetrics => ({
     totalLinesAdded: 0,
     totalLinesRemoved: 0,
   },
+  totalCost: 0,
 });
 
 export class UiTelemetryService extends EventEmitter {
@@ -173,7 +175,10 @@ export class UiTelemetryService extends EventEmitter {
     modelMetrics.tokens.tool += event.tool_token_count;
 
     this.#lastPromptTokenCount = event.input_token_count;
-  }
+
+    if (event.costPerToken) {
+      this.#metrics.totalCost += event.costPerToken * event.total_token_count;
+    }  }
 
   private processApiError(event: ApiErrorEvent) {
     const modelMetrics = this.getOrCreateModelMetrics(event.model);

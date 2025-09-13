@@ -245,6 +245,7 @@ export class ApiResponseEvent implements BaseTelemetryEvent {
   response_text?: string;
   prompt_id: string;
   auth_type?: string;
+  costPerToken?: number;
 
   constructor(
     model: string,
@@ -253,6 +254,7 @@ export class ApiResponseEvent implements BaseTelemetryEvent {
     auth_type?: string,
     usage_data?: GenerateContentResponseUsageMetadata,
     response_text?: string,
+    costPerToken?: number,
   ) {
     this['event.name'] = 'api_response';
     this['event.timestamp'] = new Date().toISOString();
@@ -268,6 +270,7 @@ export class ApiResponseEvent implements BaseTelemetryEvent {
     this.response_text = response_text;
     this.prompt_id = prompt_id;
     this.auth_type = auth_type;
+    this.costPerToken = costPerToken;
   }
 }
 
