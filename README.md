@@ -21,13 +21,27 @@ I have no interest in actively patching this fork. I'll pull from upstream whene
 
 Furthermore, I will not be accepting pull requests. Why? Because I'm going to make my own Gemini fork... with blackjack and custom prompts.
 
+## Features add to this forks
+
+
+### Responsive UI & Full-Width Display (Fork Specific)
+
+This fork's user interface now fully utilizes the terminal's width, eliminating
+unnecessary padding and ensuring content like markdown and code snippets are
+displayed responsively across the entire available space. This includes
+removing the extra left padding on content and ensuring full-width display.
+
+![Extended Frontend Screenshot](./docs/assets/Capture_frontend.png)
+
 ## How to Customize Prompts & Behavior
 
 This fork is designed to be easily customizable. All prompt and behavior modifications are handled by a custom build process that injects your changes without altering the original source code.
 
-## 'Déglingo' mode
+### 'Déglingo' mode
 
-ask the cli to enable déglingo mode to have the man men french personality (i'am french so i want it to speak french but you can change it and compile the prompt again)
+ask the cli to enable déglingo mode to have the mad men french personality 
+i'am french so i want it to speak french with an attitude, but you can change it and compile the prompt again
+
 
 ### 1. Edit Prompts in Plain Text
 
@@ -71,6 +85,10 @@ To help with customization and auditing, a few utility scripts are available:
   # Example: Verify the generated hacked prompts
   node verify_prompts.js hacked_prompts.js
   ```
+
+### Vibe Code Follow-up Folder
+
+The `vibe_code_follow_up` folder is used to track and document changes made during vibe coding sessions, providing a process log.
 
 ---
 

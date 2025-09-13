@@ -111,7 +111,7 @@ interface AppContainerProps {
  * The fraction of the terminal width to allocate to the shell.
  * This provides horizontal padding.
  */
-const SHELL_WIDTH_FRACTION = 0.89;
+const SHELL_WIDTH_FRACTION = 1.0;
 
 /**
  * The number of lines to subtract from the available terminal height
@@ -239,7 +239,7 @@ export const AppContainer = (props: AppContainerProps) => {
     Math.floor(terminalWidth * widthFraction) - 3,
   );
   const suggestionsWidth = Math.max(20, Math.floor(terminalWidth * 1.0));
-  const mainAreaWidth = Math.floor(terminalWidth * 0.9);
+  const mainAreaWidth = Math.floor(terminalWidth * 1.0);
   const staticAreaMaxItemHeight = Math.max(terminalHeight * 4, 100);
 
   const isValidPath = useCallback((filePath: string): boolean => {

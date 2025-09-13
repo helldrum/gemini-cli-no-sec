@@ -26,15 +26,13 @@ export const GeminiMessageContent: React.FC<GeminiMessageContentProps> = ({
   isPending,
   availableTerminalHeight,
   terminalWidth,
-}) => {
-  return (
-    <Box flexDirection="column">
-      <MarkdownDisplay
-        text={text}
-        isPending={isPending}
-        availableTerminalHeight={availableTerminalHeight}
-        terminalWidth={terminalWidth}
-      />
-    </Box>
-  );
-};
+}) => (
+  <Box flexDirection="column">
+    <MarkdownDisplay
+      text={text}
+      isPending={isPending}
+      availableTerminalHeight={availableTerminalHeight}
+      terminalWidth={terminalWidth}
+    />
+  </Box>
+);
