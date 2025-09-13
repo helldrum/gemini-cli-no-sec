@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Text, Box } from 'ink';
+import { Text } from 'ink';
 import { common, createLowlight } from 'lowlight';
 import type {
   Root,
@@ -20,7 +20,6 @@ import {
   MaxSizedBox,
   MINIMUM_MAX_HEIGHT,
 } from '../components/shared/MaxSizedBox.js';
-import type { LoadedSettings } from '../../config/settings.js';
 
 // Configure theming and parsing utilities.
 const lowlight = createLowlight(common);
@@ -131,17 +130,14 @@ export function colorizeCode(
   availableHeight?: number,
   maxWidth?: number,
   theme?: Theme,
-  settings?: LoadedSettings,
 ): React.ReactNode {
   const codeToHighlight = code.replace(/\n$/, '');
   const activeTheme = theme || themeManager.getActiveTheme();
-  const showLineNumbers = settings?.merged.ui?.showLineNumbers ?? true;
 
   try {
     // Render the HAST tree using the adapted theme
     // Apply the theme's default foreground color to the top-level Text element
     let lines = codeToHighlight.split('\n');
-    const padWidth = String(lines.length).length; // Calculate padding width based on number of lines
 
     let hiddenLinesCount = 0;
 
@@ -162,7 +158,7 @@ export function colorizeCode(
         additionalHiddenLinesCount={hiddenLinesCount}
         overflowDirection="top"
       >
-        {lines.map((line, index) => {
+        {lines.map((line, i) => {
           const contentToRender = highlightAndRenderLine(
             line,
             language,
@@ -170,19 +166,9 @@ export function colorizeCode(
           );
 
           return (
-            <Box key={index}>
-              {showLineNumbers && (
-                <Text color={activeTheme.colors.Gray}>
-                  {`${String(index + 1 + hiddenLinesCount).padStart(
-                    padWidth,
-                    ' ',
-                  )} `}
-                </Text>
-              )}
-              <Text color={activeTheme.defaultColor} wrap="wrap">
-                {contentToRender}
-              </Text>
-            </Box>
+            <Text key={i} color={activeTheme.defaultColor} wrap="wrap">
+              {contentToRender}
+            </Text>
           );
         })}
       </MaxSizedBox>
@@ -195,22 +181,16 @@ export function colorizeCode(
     // Fall back to plain text with default color on error
     // Also display line numbers in fallback
     const lines = codeToHighlight.split('\n');
-    const padWidth = String(lines.length).length; // Calculate padding width based on number of lines
     return (
       <MaxSizedBox
         maxHeight={availableHeight}
         maxWidth={maxWidth}
         overflowDirection="top"
       >
-        {lines.map((line, index) => (
-          <Box key={index}>
-            {showLineNumbers && (
-              <Text color={activeTheme.defaultColor}>
-                {`${String(index + 1).padStart(padWidth, ' ')} `}
-              </Text>
-            )}
-            <Text color={activeTheme.colors.Gray}>{line}</Text>
-          </Box>
+        {lines.map((line, i) => (
+          <Text key={i} color={activeTheme.colors.Gray}>
+            {line}
+          </Text>
         ))}
       </MaxSizedBox>
     );
