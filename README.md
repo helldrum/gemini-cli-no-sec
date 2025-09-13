@@ -170,6 +170,15 @@ npm install -g @google/gemini-cli@nightly
 - Conversation checkpointing to save and resume complex sessions
 - Custom context files (GEMINI.md) to tailor behavior for your projects
 
+### Responsive UI & Full-Width Display
+
+The CLI's user interface now fully utilizes the terminal's width, eliminating
+unnecessary padding (including the extra left padding on content) and ensuring
+content like markdown and code snippets are displayed responsively across the
+entire available space. Additionally, line numbering is now stripped from
+markdown code block rendering, allowing for easy copy-pasting directly from
+the terminal without the need to manually remove numerotation.
+
 ### GitHub Integration
 
 Integrate Gemini CLI directly into your GitHub workflows with [**Gemini CLI GitHub Action**](https://github.com/google-github-actions/run-gemini-cli):

@@ -131,6 +131,7 @@ export function colorizeCode(
   maxWidth?: number,
   theme?: Theme,
 ): React.ReactNode {
+  console.log({ code, language });
   const codeToHighlight = code.replace(/\n$/, '');
   const activeTheme = theme || themeManager.getActiveTheme();
 
