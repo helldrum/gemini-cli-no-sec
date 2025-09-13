@@ -22,7 +22,7 @@ export const App = () => {
 
   return (
     <StreamingContext.Provider value={uiState.streamingState}>
-      <Box flexDirection="column" width="100%">
+      <Box flexDirection="column" width="99%">
         <MainContent />
 
         <Box flexDirection="column" ref={uiState.mainControlsRef}>
