@@ -13,6 +13,10 @@ import type {
 import type { GeminiClient } from '../core/client.js';
 import { DEFAULT_GEMINI_FLASH_LITE_MODEL } from '../config/models.js';
 import { getResponseText, partToString } from './partUtils.js';
+import path from 'node:path';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * A function that summarizes the result of a tool execution.
@@ -40,19 +44,8 @@ export const defaultSummarizer: Summarizer = (
   _abortSignal: AbortSignal,
 ) => Promise.resolve(JSON.stringify(result.llmContent));
 
-export const SUMMARIZE_TOOL_OUTPUT_PROMPT = `Summarize the following tool output to be a maximum of {maxOutputTokens} tokens. The summary should be concise and capture the main points of the tool output.
 
-The summarization should be done based on the content that is provided. Here are the basic rules to follow:
-1. If the text is a directory listing or any output that is structural, use the history of the conversation to understand the context. Using this context try to understand what information we need from the tool output and return that as a response.
-2. If the text is text content and there is nothing structural that we need, summarize the text.
-3. If the text is the output of a shell command, use the history of the conversation to understand the context. Using this context try to understand what information we need from the tool output and return a summarization along with the stack trace of any error within the <error></error> tags. The stack trace should be complete and not truncated. If there are warnings, you should include them in the summary within <warning></warning> tags.
-
-
-Text to summarize:
-"{textToSummarize}"
-
-Return the summary string which should first contain an overall summarization of text followed by the full stack trace of errors and warnings in the tool output.
-`;
+export const SUMMARIZE_TOOL_OUTPUT_PROMPT = fs.readFileSync(path.resolve(__dirname, '../../../hacked_prompts_source/SUMMARIZE_TOOL_OUTPUT_PROMPT.md'), 'utf8').trim();
 
 export const llmSummarizer: Summarizer = (result, geminiClient, abortSignal) =>
   summarizeToolOutput(
