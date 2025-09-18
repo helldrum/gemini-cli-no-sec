@@ -15,6 +15,12 @@ import { DEFAULT_GEMINI_FLASH_LITE_MODEL } from '../config/models.js';
 import { getResponseText, partToString } from './partUtils.js';
 import path from 'node:path';
 import fs from 'node:fs';
+
+export type Summarizer = (
+  result: ToolResult,
+  geminiClient: GeminiClient,
+  abortSignal: AbortSignal,
+) => Promise<string>;
 export const SUMMARIZE_TOOL_OUTPUT_PROMPT = fs.readFileSync(path.join(globalThis.__dirname, 'hacked_prompts_source/SUMMARIZE_TOOL_OUTPUT_PROMPT.txt'), 'utf8').trim();
 
 export const llmSummarizer: Summarizer = (result, geminiClient, abortSignal) =>
