@@ -1,3 +1,7 @@
+# SUMMARIZE_TOOL_OUTPUT_PROMPT.txt
+# Purpose: Guides the LLM to summarize tool output concisely.
+# Context: Used to condense verbose tool outputs into a manageable summary for the LLM, saving tokens.
+#
 Your task is to summarize the provided tool output, keeping it under {maxOutputTokens} tokens. Use the conversation history for context. The summary MUST prioritize information directly relevant to the user's last question or the current active plan.
 
 - **For listings (like `ls`):** Extract the specific information the user was looking for.

@@ -1,3 +1,7 @@
+# EDIT_USER_PROMPT.txt
+# Purpose: Provides the user-facing prompt for the LLM when performing code edits.
+# Context: Used by the LLM edit fixer to present the problem and context to the model for generating code changes.
+#
 # Goal of the Original Edit
 <instruction>
 {instruction}

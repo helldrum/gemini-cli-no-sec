@@ -55,19 +55,22 @@ All custom prompts are managed as plain text files in the `hacked_prompts_source
 
 Simply edit these `.txt` files to change the agent's behavior.
 
-### 2. Build the Prompt Module
+### Understanding the Core Prompts
 
-After editing the `.txt` files, you need to convert them into a JavaScript module that the build process can use. Run the following command:
+This fork leverages several core prompts to define the agent's behavior and capabilities. These prompts are designed to be easily customizable via the `.txt` files in `hacked_prompts_source/`. Understanding their purpose will help you tailor the agent more effectively:
 
-```bash
-node build_hacked_prompts.js
-```
+-   **`CORE_SYSTEM_PROMPT.txt`**: This is the foundational prompt that defines the agent's core personality, rules, and overall system instructions. Modifying this will significantly alter the agent's fundamental behavior and tone.
+-   **`COMPRESSION_PROMPT.Ttxt`**: Used by the history compression agent. This prompt guides the LLM on how to summarize and condense past conversation history to save tokens and maintain context in long sessions.
+-   **`INIT_COMMAND_PROMPT.txt`**: This prompt is used when the CLI is initialized or a new session starts, guiding the agent on its initial actions or greetings.
+-   **`LOOP_DETECTION_PROMPT.txt`**: This prompt is fed to the LLM to help it detect and prevent potential infinite loops in its responses or tool usage, ensuring the agent doesn't get stuck in repetitive cycles.
+-   **`NEXT_SPEAKER_PROMPT.txt`**: This prompt helps the agent determine whether the 'user' or the 'model' should logically speak next in a conversation, based on the model's last response. This is crucial for maintaining a natural conversational flow.
+-   **`PROMPT_COMPLETION_ASSISTANT_PROMPT.txt`**: This prompt is used by the prompt completion feature. It instructs the LLM to act as a "professional prompt engineering assistant" to complete partial user prompts, providing concise and actionable suggestions. **Note:** This prompt uses templating (e.g., `{{trimmedText}}`) which is replaced dynamically by the CLI before being sent to the LLM.
 
-This will read all files in `hacked_prompts_source/` and generate an updated `hacked_prompts.js` file.
 
-### 3. Compile the Final CLI
 
-The final step is to bundle the application. The build process will automatically use a custom plugin (`esbuild.prompt-patcher.js`) to inject your prompts from `hacked_prompts.js` and apply other patches. This patch also disables the security feature that blocks shell command substitution (`$()`, `<()`, etc.), giving the agent more power.
+### 2. Compile the Final CLI
+
+The final step is to bundle the application. During this process, your custom prompt files from `hacked_prompts_source/` are copied into the `bundle/` directory. The compiled code then directly reads these `.txt` prompt files from the `bundle/hacked_prompts_source/` directory at runtime. This build process also disables the security feature that blocks shell command substitution (`$()`, `<()`, etc.), giving the agent more power. **Note:** This modification was made at the explicit request of the fork maintainer, who understands and accepts the associated security risks of enabling direct command substitution. Command substitution allows embedding the output of one command directly into another, which, while powerful, can be exploited for command injection if not not handled carefully.
 
 ```bash
 npm run bundle

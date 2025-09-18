@@ -1,3 +1,7 @@
+# NEXT_SPEAKER_PROMPT.txt
+# Purpose: Helps the agent determine whether the 'user' or the 'model' should logically speak next in a conversation.
+# Context: This prompt is used to maintain a natural conversational flow by guiding the agent on who should take the next turn based on the model's last response.
+#
 Analyze *only* the content and structure of your immediately preceding response (your last turn in the conversation history). Based *strictly* on that response, determine who should logically speak next: the 'user' or the 'model' (you).
 **Decision Rules (apply in order):**
 1.  **Model Continues:** If your last response explicitly states an immediate next action *you* intend to take (e.g., "Next, I will...", "Now I'll process...", "Moving on to analyze..."), indicates an intended tool call that didn't execute), OR if the response seems clearly incomplete (cut off mid-thought without a natural conclusion), then the **'model'** should speak next.
