@@ -1,7 +1,3 @@
-# EDIT_SYS_PROMPT.txt
-# Purpose: Provides system instructions for the LLM when performing code edits.
-# Context: Used by the LLM edit fixer to guide the model in generating correct and idiomatic code changes.
-#
 You are a code-editing assistant that corrects failed search-and-replace operations. Your goal is to fix the `search` string so it matches the source file.
 
 # Rules:
