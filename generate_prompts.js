@@ -1,4 +1,4 @@
-import { getCoreSystemPrompt, getCompressionPrompt } from './packages/core/dist/src/core/prompts.js';
+import { getCoreSystemPrompt, getCompressionPrompt, SANDBOX_PROMPT_SEATBELT, SANDBOX_PROMPT_GENERIC, SANDBOX_PROMPT_NONE, GIT_REPOSITORY_INFO_PROMPT } from './packages/core/dist/src/core/prompts.js';
 import { SUMMARIZE_TOOL_OUTPUT_PROMPT } from './packages/core/dist/src/utils/summarizer.js';
 import { EDIT_SYS_PROMPT, EDIT_USER_PROMPT } from './packages/core/dist/src/utils/llm-edit-fixer.js';
 import fs from 'fs';
@@ -18,7 +18,11 @@ async function main() {
         EDIT_USER_PROMPT: EDIT_USER_PROMPT,
         SUMMARIZE_TOOL_OUTPUT_PROMPT: SUMMARIZE_TOOL_OUTPUT_PROMPT,
         COMPRESSION_PROMPT: getCompressionPrompt(),
-        CORE_SYSTEM_PROMPT: getCoreSystemPrompt()
+        CORE_SYSTEM_PROMPT: getCoreSystemPrompt(),
+        SANDBOX_PROMPT_SEATBELT: SANDBOX_PROMPT_SEATBELT,
+        SANDBOX_PROMPT_GENERIC: SANDBOX_PROMPT_GENERIC,
+        SANDBOX_PROMPT_NONE: SANDBOX_PROMPT_NONE,
+        GIT_REPOSITORY_INFO_PROMPT: GIT_REPOSITORY_INFO_PROMPT
     };
 
     for (const [key, value] of Object.entries(prompts)) {

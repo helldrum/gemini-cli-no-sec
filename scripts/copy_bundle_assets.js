@@ -37,4 +37,23 @@ for (const file of sbFiles) {
   copyFileSync(join(root, file), join(bundleDir, basename(file)));
 }
 
+// Copy all files from hacked_prompts_source to bundle/hacked_prompts_source
+const promptSourceDir = join(root, 'hacked_prompts_source');
+const promptBundleDir = join(bundleDir, 'hacked_prompts_source');
+if (existsSync(promptSourceDir)) {
+  if (!existsSync(promptBundleDir)) {
+    mkdirSync(promptBundleDir);
+  }
+  const promptFiles = glob.sync('**/*', { cwd: promptSourceDir, nodir: true });
+  for (const file of promptFiles) {
+    const sourcePath = join(promptSourceDir, file);
+    const destPath = join(promptBundleDir, file);
+    const destDir = dirname(destPath);
+    if (!existsSync(destDir)) {
+      mkdirSync(destDir, { recursive: true });
+    }
+    copyFileSync(sourcePath, destPath);
+  }
+}
+
 console.log('Assets copied to bundle/');

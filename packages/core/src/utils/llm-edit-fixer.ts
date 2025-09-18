@@ -11,12 +11,9 @@ import { DEFAULT_GEMINI_FLASH_MODEL } from '../config/models.js';
 import { promptIdContext } from './promptIdContext.js';
 import path from 'node:path';
 import fs from 'node:fs';
-import { fileURLToPath } from 'node:url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 const MAX_CACHE_SIZE = 50;
-
-export const EDIT_USER_PROMPT = fs.readFileSync(path.resolve(__dirname, '../../../hacked_prompts_source/EDIT_USER_PROMPT.md'), 'utf8').trim();
+export const EDIT_SYS_PROMPT = fs.readFileSync(path.join(globalThis.__dirname, 'hacked_prompts_source/EDIT_SYS_PROMPT.txt'), 'utf8').trim();
+export const EDIT_USER_PROMPT = fs.readFileSync(path.join(globalThis.__dirname, 'hacked_prompts_source/EDIT_USER_PROMPT.txt'), 'utf8').trim();
 
 export interface SearchReplaceEdit {
   search: string;

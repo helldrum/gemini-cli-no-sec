@@ -15,37 +15,7 @@ import { DEFAULT_GEMINI_FLASH_LITE_MODEL } from '../config/models.js';
 import { getResponseText, partToString } from './partUtils.js';
 import path from 'node:path';
 import fs from 'node:fs';
-import { fileURLToPath } from 'node:url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-/**
- * A function that summarizes the result of a tool execution.
- *
- * @param result The result of the tool execution.
- * @returns The summary of the result.
- */
-export type Summarizer = (
-  result: ToolResult,
-  geminiClient: GeminiClient,
-  abortSignal: AbortSignal,
-) => Promise<string>;
-
-/**
- * The default summarizer for tool results.
- *
- * @param result The result of the tool execution.
- * @param geminiClient The Gemini client to use for summarization.
- * @param abortSignal The abort signal to use for summarization.
- * @returns The summary of the result.
- */
-export const defaultSummarizer: Summarizer = (
-  result: ToolResult,
-  _geminiClient: GeminiClient,
-  _abortSignal: AbortSignal,
-) => Promise.resolve(JSON.stringify(result.llmContent));
-
-
-export const SUMMARIZE_TOOL_OUTPUT_PROMPT = fs.readFileSync(path.resolve(__dirname, '../../../hacked_prompts_source/SUMMARIZE_TOOL_OUTPUT_PROMPT.md'), 'utf8').trim();
+export const SUMMARIZE_TOOL_OUTPUT_PROMPT = fs.readFileSync(path.join(globalThis.__dirname, 'hacked_prompts_source/SUMMARIZE_TOOL_OUTPUT_PROMPT.txt'), 'utf8').trim();
 
 export const llmSummarizer: Summarizer = (result, geminiClient, abortSignal) =>
   summarizeToolOutput(

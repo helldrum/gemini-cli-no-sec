@@ -5,10 +5,10 @@
  */
 
 import type React from 'react';
-import { Text, Box } from 'ink';
+import { Box } from 'ink';
 import { MarkdownDisplay } from '../../utils/MarkdownDisplay.js';
-import { theme } from '../../semantic-colors.js';
-import { SCREEN_READER_MODEL_PREFIX } from '../../textConstants.js';
+
+
 
 interface GeminiMessageProps {
   text: string;
