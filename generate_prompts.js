@@ -1,6 +1,8 @@
 import { getCoreSystemPrompt, getCompressionPrompt, SANDBOX_PROMPT_SEATBELT, SANDBOX_PROMPT_GENERIC, SANDBOX_PROMPT_NONE, GIT_REPOSITORY_INFO_PROMPT } from './packages/core/dist/src/core/prompts.js';
 import { SUMMARIZE_TOOL_OUTPUT_PROMPT } from './packages/core/dist/src/utils/summarizer.js';
 import { EDIT_SYS_PROMPT, EDIT_USER_PROMPT } from './packages/core/dist/src/utils/llm-edit-fixer.js';
+import { LOOP_DETECTION_PROMPT } from './packages/core/dist/src/services/loopDetectionService.js';
+import { INIT_COMMAND_PROMPT } from './packages/cli/dist/src/ui/commands/initCommand.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -22,7 +24,9 @@ async function main() {
         SANDBOX_PROMPT_SEATBELT: SANDBOX_PROMPT_SEATBELT,
         SANDBOX_PROMPT_GENERIC: SANDBOX_PROMPT_GENERIC,
         SANDBOX_PROMPT_NONE: SANDBOX_PROMPT_NONE,
-        GIT_REPOSITORY_INFO_PROMPT: GIT_REPOSITORY_INFO_PROMPT
+        GIT_REPOSITORY_INFO_PROMPT: GIT_REPOSITORY_INFO_PROMPT,
+        LOOP_DETECTION_PROMPT: LOOP_DETECTION_PROMPT,
+        INIT_COMMAND_PROMPT: INIT_COMMAND_PROMPT
     };
 
     for (const [key, value] of Object.entries(prompts)) {
