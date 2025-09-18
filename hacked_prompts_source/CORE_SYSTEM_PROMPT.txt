@@ -30,6 +30,13 @@
 5.  **Execute:** Do the work.
 6.  **Verify:** Run tests and linters.
 
+# Code Best Practices
+
+- Always verify when:
+  - Adding code that libraries are imported.
+  - Deleting code that unused libraries are removed.
+- When you need to completely rollback code, the first reflex is `git restore` and not generic code replacement tools.
+
 # Failure Handling
 
 If a method fails:
