@@ -53,4 +53,23 @@ Des tests ont été effectués avec un prompt contenant divers secrets.
 
 ---
 
+## Mises à jour et Problèmes Récents (20/09/2025)
+
+### Progrès
+- Le fichier de règles de caviardage `packages/core/src/pii/gitleaksFilters.ts` a été identifié et son contenu est correct.
+- La logique d'activation/désactivation de l'anonymisation (`anonymizationEnabled`, `isAnonymizationEnabled`, `setAnonymizationEnabled`) est présente dans `packages/core/src/config/config.ts` et utilisée dans `packages/core/src/core/client.ts`.
+- La commande `/anonymize` (implémentée dans `packages/cli/src/ui/commands/anonymizeCommand.ts`) a été récupérée. Elle permet de changer l'état de l'anonymisation via les arguments `on` ou `off`.
+
+### Problèmes Rencontrés
+- **Intégration de la commande `/anonymize` :** Des difficultés persistantes ont été rencontrées pour ajouter la commande `/anonymize` au système de commandes principal (`gemini.tsx`). Les tentatives d'insertion via `replace` ont échoué à plusieurs reprises en raison de problèmes de correspondance exacte de la `old_string` (indentation, caractères invisibles, etc.). Une approche de réécriture complète du fichier a été envisagée mais non exécutée.
+- **Fonction de désactivation du caviardage :** Le problème de la fonction de désactivation qui ne fonctionne pas reste à investiguer. La logique de la commande `/anonymize` est correcte, ce qui suggère que le problème se situe ailleurs, potentiellement dans la persistance de la configuration ou la manière dont le `GeminiClient` lit l'état de l'anonymisation.
+- **Gestion du Base64 :** La demande d'implémentation d'une fonction spécifique pour le caviardage des chaînes Base64 a été mise en suspens pour le moment, jugée trop coûteuse en temps et en effort par rapport aux priorités actuelles.
+
+### Prochaines Étapes (Recommandées)
+- [ ] Résoudre l'intégration de la commande `/anonymize` dans `gemini.tsx` (potentiellement via une modification manuelle ou un outil plus robuste).
+- [ ] Débugger la fonction de désactivation du caviardage pour comprendre pourquoi elle ne prend pas effet.
+- [ ] Mettre en place l'intégration de la commande dans le "menu" (si ce n'est pas déjà fait par l'intégration de `yargs`).
+
+---
+
 _Ce document sera mis à jour au fur et à mesure de l'avancement._

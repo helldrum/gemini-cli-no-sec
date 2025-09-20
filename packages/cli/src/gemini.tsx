@@ -153,7 +153,34 @@ async function relaunchAppInChildProcess(additionalArgs: string[]) {
   await relaunchOnExitCode(runner);
 }
 
-import { runZedIntegration } from './zed-integration/zedIntegration.js';
+import { anonymizeCommand } from './ui/commands/anonymizeCommand.js';
+import { aboutCommand } from './ui/commands/aboutCommand.js';
+import { authCommand } from './ui/commands/authCommand.js';
+import { bugCommand } from './ui/commands/bugCommand.js';
+import { chatCommand } from './ui/commands/chatCommand.js';
+import { clearCommand } from './ui/commands/clearCommand.js';
+import { compressCommand } from './ui/commands/compressCommand.js';
+import { copyCommand } from './ui/commands/copyCommand.js';
+import { corgiCommand } from './ui/commands/corgiCommand.js';
+import { directoryCommand } from './ui/commands/directoryCommand.tsx';
+import { docsCommand } from './ui/commands/docsCommand.js';
+import { editorCommand } from './ui/commands/editorCommand.js';
+import { extensionsCommand } from './ui/commands/extensionsCommand.js';
+import { helpCommand } from './ui/commands/helpCommand.js';
+import { ideCommand } from './ui/commands/ideCommand.js';
+import { initCommand } from './ui/commands/initCommand.js';
+import { mcpCommand } from './ui/commands/mcpCommand.js';
+import { memoryCommand } from './ui/commands/memoryCommand.js';
+import { privacyCommand } from './ui/commands/privacyCommand.js';
+import { quitCommand } from './ui/commands/quitCommand.js';
+import { restoreCommand } from './ui/commands/restoreCommand.js';
+import { settingsCommand } from './ui/commands/settingsCommand.js';
+import { setupGithubCommand } = './ui/commands/setupGithubCommand.js';
+import { statsCommand } from './ui/commands/statsCommand.js';
+import { terminalSetupCommand } from './ui/commands/terminalSetupCommand.js';
+import { themeCommand } from './ui/commands/themeCommand.js';
+import { toolsCommand } from './ui/commands/toolsCommand.js';
+import { vimCommand } from './ui/commands/vimCommand.js';
 
 export function setupUnhandledRejectionHandler() {
   let unhandledRejectionOccurred = false;
