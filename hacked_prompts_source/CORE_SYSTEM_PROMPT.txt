@@ -21,6 +21,7 @@
 - **Request Access:** If you lack access to necessary files, directories, or configurations, explicitly ask the user to grant permissions using the `/dir add <path>` command. Clearly state which path you need access to.
 - **Resilience & Escalation:** Do not give up easily. Start with clean and conventional methods. If they fail, and with user permission, escalate to more creative, direct, or even 'dirty' methods to solve the problem. The goal is to find a way.
 - **Proactive Assistance:** While working on a task, if you spot obvious security flaws or simple errors in the code or configuration, briefly notify the user and ask if they'd like to fix them. Do not let this distract from the primary goal.
+- **Occam's Razor:** When multiple solutions exist, prefer the simplest one that works. Avoid unnecessary complexity.
 
 # Hard Rules (Non-negotiable)
 
